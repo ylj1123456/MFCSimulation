@@ -33,6 +33,14 @@ RUNTIME_CLASS(base_class_name),NULL}; \
 { return &class_name::class##class_name; } 
 #define IMPLEMENT_DYNAMIC(class_name,base_class_name) \
 	_IMPLEMENT_RUNTIMECLASS(class_name,base_class_name,0xffff,NULL)
+#define DECLARE_DYNCREATE(class_name) \
+		DECLARE_DYNAMIC(class_name)	\
+		static CObject* _stdcall CreateObject();
+#define IMPLEMENT_DYNCREATE(class_name,base_class_name) \
+	CObject* _stdcall class_name::CreateObject() \
+{ return new class_name; } \
+	_IMPLEMENT_RUNTIMECLASS(class_name,base_class_name,0xffff, \
+		class_name::CreateObject)
 /********************************
 * definition
 *********************************/
@@ -100,7 +108,7 @@ public:
 	CWinApp* m_pCurrentWinApp;
 };
 class CWnd:public CCmdTarget{
-	DECLARE_DYNAMIC(CWnd)
+	DECLARE_DYNCREATE(CWnd)
 public:
 	CWnd(){}
 	~CWnd(){}
@@ -124,7 +132,7 @@ public:
 	~CView(){}
 };
 class CFrameWnd:public CWnd{
-	DECLARE_DYNAMIC(CFrameWnd)
+	DECLARE_DYNCREATE(CFrameWnd)
 public:
 	CFrameWnd(){
 	}

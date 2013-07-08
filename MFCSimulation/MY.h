@@ -23,16 +23,19 @@ public:
 	bool InitInstance();
 };
 class CMyView:public CView{
+	DECLARE_DYNCREATE(CMyView)
 public:
 	CMyView(){}
 	~CMyView(){}
 };
 class CMyFrameWnd:public CFrameWnd{
+	DECLARE_DYNCREATE(CMyFrameWnd)
 public:
 	CMyFrameWnd();
 	virtual	~CMyFrameWnd(){}
 };
 class CMyDoc:public CDocument{
+	DECLARE_DYNCREATE(CMyDoc)
 public:
 	CMyDoc(){}
 	~CMyDoc(){}
