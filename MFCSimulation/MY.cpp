@@ -27,5 +27,7 @@ int main(int argc,char* argv[])
 	pApp->InitInstance();
 	pApp->Run();
 	*/
-	PrintAllClasses();
+	//PrintAllClasses();
+	CArchive ar;
+	ar<<"123";
 }

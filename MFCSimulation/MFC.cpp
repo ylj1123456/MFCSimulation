@@ -32,6 +32,10 @@ bool CObject::IsKindOf(const CRuntimeClass* pClass) const
 	}
 	return false;
 }
+CObject* CArchive::ReadObject(const CRuntimeClass* pClass)
+{
+	return (*(pClass->m_pfnCreateObject))();
+}
 
 IMPLEMENT_DYNAMIC(CCmdTarget,CObject)
 IMPLEMENT_DYNAMIC(CWinThread,CCmdTarget)

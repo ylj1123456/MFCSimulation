@@ -13,8 +13,9 @@ class CWnd;
 class CView;
 class CFrameWnd;
 class CDocument;
+class CArchive;
 struct CRuntimeClass;
-struct AFX_CLASSINIT;/********************************
+struct AFX_CLASSINIT;/********************************
 * macro
 ********************************/
 #define DECLARE_DYNAMIC(class_name) \
@@ -27,20 +28,31 @@ struct AFX_CLASSINIT;/********************************
 	static char _lpsz##class_name[]=#class_name; \
 	CRuntimeClass class_name::class##class_name={ \
 	_lpsz##class_name,sizeof(class_name),wSchema,pfnNew, \
-RUNTIME_CLASS(base_class_name),NULL}; \
+	RUNTIME_CLASS(base_class_name),NULL}; \
 	static AFX_CLASSINIT _init_##class_name(&class_name::class##class_name); \
 	CRuntimeClass * class_name::GetRuntimeClass() const \
 { return &class_name::class##class_name; } 
 #define IMPLEMENT_DYNAMIC(class_name,base_class_name) \
 	_IMPLEMENT_RUNTIMECLASS(class_name,base_class_name,0xffff,NULL)
 #define DECLARE_DYNCREATE(class_name) \
-		DECLARE_DYNAMIC(class_name)	\
-		static CObject* _stdcall CreateObject();
+	DECLARE_DYNAMIC(class_name)	\
+	static CObject* _stdcall CreateObject();
 #define IMPLEMENT_DYNCREATE(class_name,base_class_name) \
 	CObject* _stdcall class_name::CreateObject() \
 { return new class_name; } \
 	_IMPLEMENT_RUNTIMECLASS(class_name,base_class_name,0xffff, \
-		class_name::CreateObject)
+	class_name::CreateObject)
+#define DECLARE_SERIAL(class_name) \
+	DECLARE_DYNCREATE(class_name) \
+	friend CArchive& _stdcall operator>>(CArchive& ar,class_name* &pOb);
+#define IMPLEMENT_SERIAL(class_name,base_class_name,wSchema) \
+		CObject* _stdcall class_name::CreateObject() \
+{ return new class_name; } \
+		_IMPLEMENT_RUNTIMECLASS(class_name,base_class_name,wSchema, \
+			class_name::CreateObject) \
+		CArchive& _stdcall operator>>(CArchive& ar,class_name* &pOb) \
+{ pOb=(class_name*)ar.ReadObject(RUNTIME_CLASS(class_name)); \
+	return ar; } 
 /********************************
 * definition
 *********************************/
@@ -113,7 +125,7 @@ public:
 	CWnd(){}
 	~CWnd(){}
 	virtual bool Create(){ cout<<"CWnd::Create\n";
-	 return true;
+	return true;
 	}
 	bool CreateEx(){
 		cout<<"CWnd::CreateEx"<<endl;
@@ -157,6 +169,28 @@ struct AFX_CLASSINIT{
 		pNewClass->m_pNextClass=CRuntimeClass::pFirstClass;
 		CRuntimeClass::pFirstClass=pNewClass;
 	}
+};
+class CArchive{
+
+private:
+	//	istream m_input;
+	//	ostream m_output;
+public:
+	template<class T> 
+	CArchive& operator>>(T& t)
+	{
+		cout<<"read in "<<t<<endl;
+		return *this;
+	}
+	template<class T>
+	CArchive& operator<<(const T& t)
+	{
+		cout<<"write out "<<t<<endl;
+		return *this;
+	}
+	CObject* ReadObject( const CRuntimeClass *pClass);
+
+
 };
 /**************************************
 * global function
