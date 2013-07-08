@@ -9,7 +9,10 @@ class CMyWinApp;
 class CMyView;
 class CMyFrameWnd;
 class CMyDoc;
-
+/****************************************
+* global function
+****************************************/
+void PrintAllClasses();
 /****************************************
 * definition
 *****************************************/
@@ -34,4 +37,5 @@ public:
 	CMyDoc(){}
 	~CMyDoc(){}
 };
+
 #endif
