@@ -21,6 +21,18 @@ CRuntimeClass* CObject::GetRuntimeClass() const
 {
 	return &CObject::classCObject;
 }
+bool CObject::IsKindOf(const CRuntimeClass* pClass) const
+{
+	CRuntimeClass* pClassThis=GetRuntimeClass();
+	while(pClassThis!=NULL)
+	{
+		if(pClassThis==pClass)
+			return true;
+		pClassThis=pClassThis->m_pBaseClass;
+	}
+	return false;
+}
+
 IMPLEMENT_DYNAMIC(CCmdTarget,CObject)
 IMPLEMENT_DYNAMIC(CWinThread,CCmdTarget)
 IMPLEMENT_DYNAMIC(CWinApp,CWinThread)

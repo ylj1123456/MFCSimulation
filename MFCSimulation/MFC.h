@@ -53,6 +53,8 @@ public:
 public:
 	CObject(){}
 	~CObject(){}
+public:
+	bool IsKindOf(const CRuntimeClass* pClass) const;
 };
 class CCmdTarget:public CObject{
 	DECLARE_DYNAMIC(CCmdTarget)
