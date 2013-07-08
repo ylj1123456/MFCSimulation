@@ -1,5 +1,7 @@
 #include"MFC.h"
-
+using namespace std;
+#ifndef _MY_H_
+#define _MY_H_
 /*****************************************
 * declaration
 ******************************************/
@@ -15,6 +17,7 @@ class CMyWinApp:public CWinApp{
 public:
 	CMyWinApp(){}
 	~CMyWinApp(){}
+	bool InitInstance();
 };
 class CMyView:public CView{
 public:
@@ -23,11 +26,12 @@ public:
 };
 class CMyFrameWnd:public CFrameWnd{
 public:
-	CMyFrameWnd(){}
-	~CMyFrameWnd(){}
+	CMyFrameWnd();
+	virtual	~CMyFrameWnd(){}
 };
 class CMyDoc:public CDocument{
 public:
 	CMyDoc(){}
 	~CMyDoc(){}
 };
+#endif
