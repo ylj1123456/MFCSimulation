@@ -13,15 +13,34 @@ class CWnd;
 class CView;
 class CFrameWnd;
 class CDocument;
+struct CRuntimeClass;
+/********************************
+* macro
+********************************/
+
 /********************************
 * definition
 *********************************/
+//Runtime Class to record the type of each class
+struct CRuntimeClass{
+	char *m_lpszClassName;	//class name
+	int m_nObjectSize;		//class size
+	unsigned int m_wSchema;	//schema number
+	CObject* (_stdcall* m_pfnCreateObject)();//pointer to class create function, null equals to abstract class
+	CRuntimeClass *m_pBaseClass;	//Base Class
+	static CRuntimeClass* pFirstClass;// start of the class list
+	CRuntimeClass* m_pNextClass;	//linked to the next class
+};
 class CObject{
+public:
+	static CRuntimeClass classCObject;
+	virtual CRuntimeClass* GetRuntimeClass() const;
 public:
 	CObject(){}
 	~CObject(){}
 };
 class CCmdTarget:public CObject{
+public:
 public:
 	CCmdTarget() {}
 	~CCmdTarget(){}
