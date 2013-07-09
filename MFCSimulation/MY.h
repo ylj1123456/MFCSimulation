@@ -13,6 +13,8 @@ class CMyDoc;
 * global function
 ****************************************/
 void PrintAllClasses();
+void printlpEntries(AFX_MSGMAP_ENTRY* lpEntry);
+void MsgMapPrinting(AFX_MSGMAP* pMessageMap);
 /****************************************
 * definition
 *****************************************/
@@ -21,24 +23,28 @@ public:
 	CMyWinApp(){}
 	~CMyWinApp(){}
 	bool InitInstance();
+	DECLARE_MESSAGE_MAP()
 };
 class CMyView:public CView{
 	DECLARE_DYNCREATE(CMyView)
 public:
 	CMyView(){}
 	~CMyView(){}
+	DECLARE_MESSAGE_MAP()
 };
 class CMyFrameWnd:public CFrameWnd{
 	DECLARE_DYNCREATE(CMyFrameWnd)
 public:
 	CMyFrameWnd();
 	virtual	~CMyFrameWnd(){}
+	DECLARE_MESSAGE_MAP()
 };
 class CMyDoc:public CDocument{
 	DECLARE_DYNCREATE(CMyDoc)
 public:
 	CMyDoc(){}
 	~CMyDoc(){}
+	DECLARE_MESSAGE_MAP()
 };
 
 #endif

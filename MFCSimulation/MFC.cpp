@@ -47,3 +47,35 @@ IMPLEMENT_DYNAMIC(CView,CWnd)
 IMPLEMENT_DYNCREATE(CMyFrameWnd,CFrameWnd)
 IMPLEMENT_DYNCREATE(CMyDoc,CDocument)
 IMPLEMENT_DYNCREATE(CMyView,CView)
+
+AFX_MSGMAP* CCmdTarget::GetMessageMap() const
+{
+	return &CCmdTarget::messageMap;
+}
+AFX_MSGMAP CCmdTarget::messageMap={
+	NULL,
+	(AFX_MSGMAP_ENTRY*)&(CCmdTarget::_messageEntries)
+};
+AFX_MSGMAP_ENTRY CCmdTarget::_messageEntries[]=
+{
+	{0,0,CCmdTargetid,0,AfxSig_end,0}
+};
+BEGIN_MESSAGE_MAP(CWnd,CCmdTarget)
+ON_COMMAND(CWndid,0)
+END_MESSAGE_MAP()
+
+BEGIN_MESSAGE_MAP(CFrameWnd,CWnd)
+ON_COMMAND(CFrameWndid,0)
+END_MESSAGE_MAP()
+
+BEGIN_MESSAGE_MAP(CDocument,CCmdTarget)
+ON_COMMAND(CFrameWndid,0)
+END_MESSAGE_MAP()
+
+BEGIN_MESSAGE_MAP(CView,CWnd)
+ON_COMMAND(CViewid,0)
+END_MESSAGE_MAP()
+
+BEGIN_MESSAGE_MAP(CWinApp,CCmdTarget)
+ON_COMMAND(CWinAppid,0)
+END_MESSAGE_MAP()
