@@ -42,6 +42,22 @@ enum AfxSig{
 #define CMyViewid		1221
 #define CDocumentid		13
 #define CMyDocid		131
+//////////////////////////////////////////////
+typedef char* LPSTR;
+typedef const char* LPCSTR;
+typedef unsigned long DWORD;
+typedef int				BOOL;
+typedef unsigned char	BYTE;
+typedef unsigned short	WORD;
+typedef int				INT;
+typedef unsigned int	UINT;
+typedef long			LONG;
+typedef UINT			WPARAM;
+typedef LONG			LPARAM;
+typedef LONG			LRESULT;
+typedef	int				HWND;
+
+
 #define DECLARE_DYNAMIC(class_name) \
 	public: \
 	static CRuntimeClass class##class_name; \
@@ -139,6 +155,7 @@ public:
 	CCmdTarget() {}
 	~CCmdTarget(){}
 
+	virtual bool OnCmdMsg(UINT nID,int nCode);
 	DECLARE_MESSAGE_MAP()
 };
 class CWinThread:public CCmdTarget{
@@ -154,6 +171,8 @@ public:
 		cout<<"CWinThread::Run \n";
 		return 1;
 	}
+
+	
 };
 class CWinApp:public CWinThread{
 	DECLARE_DYNAMIC(CWinApp)
@@ -195,18 +214,30 @@ public:
 		cout<<"CWnd::PreCreateWindow"<<endl;
 		return true;
 	}
+	virtual bool OnCommand(WPARAM wParam,LPARAM lParam);
+	virtual LRESULT WindowProc(UINT mMsg,WPARAM wParam,LPARAM lParam);
+	virtual LRESULT DefWindowProc(UINT message,WPARAM wParam,LPARAM lParam);
+
+
+
 	DECLARE_MESSAGE_MAP()
 };
 class CView:public CWnd{
+	friend CFrameWnd;
 	DECLARE_DYNAMIC(CView)
 public:
 	CView(){}
 	~CView(){}
+	CDocument* m_pDocument;
+	virtual bool OnCmdMsg(UINT nID,int nCode);
+
 	DECLARE_MESSAGE_MAP()
 };
 class CFrameWnd:public CWnd{
+	friend CView;
 	DECLARE_DYNCREATE(CFrameWnd)
 public:
+	CView* m_pViewActive;		//current active view
 	CFrameWnd(){
 	}
 	~CFrameWnd(){}
@@ -215,6 +246,9 @@ public:
 		CreateEx();
 		return true;
 	}
+	CView* GetActiveView() const;
+	virtual bool OnCommand(WPARAM wParam,LPARAM lParam);
+	virtual bool OnCmdMsg(UINT nID,int nCode);
 	virtual bool PreCreateWindow(){ cout<<"CFrameWnd::PreCreateWindow"<<endl; return true;}
 	DECLARE_MESSAGE_MAP()
 };
@@ -225,6 +259,7 @@ class CDocument:public CCmdTarget
 public:
 	CDocument(){}
 	~CDocument(){}
+	virtual bool OnCmdMsg(UINT nID,int nCode);
 };
 struct AFX_CLASSINIT{
 	AFX_CLASSINIT(CRuntimeClass * pNewClass)
@@ -258,5 +293,10 @@ public:
 * global function
 **************************************/
 CWinApp* AfxGetApp();
+LRESULT AfxWndProc(HWND hWnd,UINT nMsg,WPARAM wParam,LPARAM lParam,CWnd *pWnd);
+LRESULT AfxCallWndProc(CWnd*pWnd,HWND hWnd,UINT nMsg,WPARAM wParam,LPARAM lParam);
+
+
+
 
 #endif
